@@ -22,6 +22,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 * Documentation updates and fixes ({uri-issue}165[#165], {uri-issue}166[#166], {uri-issue}172[#172])
 * Added `--disable-active-clipboard` switch to prevent clipboard request injection
 * Added `--no-downgrade` switch to prevent protocol downgrading where possible {uri-issue}189[#189]
+* Added `--gdi` switch to enable drawing orders ({uri-issue}50[#50])
 
 === Bug fixes
 

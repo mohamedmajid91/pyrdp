@@ -41,6 +41,9 @@ class MITMConfig:
         self.outDir: Path = None
         """The output directory"""
 
+        self.useGdi: bool = False
+        """Whether to allow the client to use the GDI rendering pipeline extension."""
+
         self.recordReplays: bool = True
         """Whether replays should be recorded or not"""
 
