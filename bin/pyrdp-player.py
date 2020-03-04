@@ -14,7 +14,7 @@ from twisted.internet import asyncioreactor
 asyncioreactor.install(asyncio.get_event_loop())
 
 from pyrdp.player import HAS_GUI
-from pyrdp.logging import LOGGER_NAMES, NotifyHandler
+from pyrdp.logging import LOGGER_NAMES, NotifyHandler, LoggerNameFilter
 
 from pathlib import Path
 import argparse
@@ -28,7 +28,7 @@ if HAS_GUI:
     from PySide2.QtWidgets import QApplication
 
 
-def prepareLoggers(logLevel: int, outDir: Path, headless: bool):
+def prepareLoggers(logLevel: int, outDir: Path, headless: bool, logFilter: str):
     logDir = outDir / "logs"
     logDir.mkdir(exist_ok = True)
 
@@ -37,6 +37,7 @@ def prepareLoggers(logLevel: int, outDir: Path, headless: bool):
 
     streamHandler = logging.StreamHandler()
     streamHandler.setFormatter(textFormatter)
+    streamHandler.addFilter(LoggerNameFilter(logFilter))
 
     fileHandler = logging.handlers.RotatingFileHandler(logDir / "player.log")
     fileHandler.setFormatter(textFormatter)
@@ -74,13 +75,14 @@ def main():
     parser.add_argument("-o", "--output", help="Output folder", default="pyrdp_output")
     parser.add_argument("-L", "--log-level", help="Log level", default="INFO", choices=["INFO", "DEBUG", "WARNING", "ERROR", "CRITICAL"], nargs="?")
     parser.add_argument("--headless", help="Parse a replay without rendering the user interface.", action="store_true")
+    parser.add_argument("-F", "--log-filter", help="Only show logs from this logger name (accepts '*' wildcards)", default="")
 
     args = parser.parse_args()
     outDir = Path(args.output)
     outDir.mkdir(exist_ok = True)
 
     logLevel = getattr(logging, args.log_level)
-    logger = prepareLoggers(logLevel, outDir, args.headless)
+    logger = prepareLoggers(logLevel, outDir, args.headless, args.log_filter)
 
     if not HAS_GUI and not args.headless:
         logger.error('Headless mode is not specified and PySide2 is not installed. Install PySide2 to use the graphical user interface.')
