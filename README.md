@@ -40,6 +40,7 @@ PyRDP was [introduced in 2018](https://www.gosecure.net/blog/2018/12/19/rdp-man-
       - [Choosing when to resume normal activity](#choosing-when-to-resume-normal-activity)
     + [Other MITM arguments](#other-mitm-arguments)
       - [--no-downgrade](#--no-downgrade)
+      - [`--gdi`: Accelerated Graphics Pipeline](#--gdi-accelerated-graphics-pipeline)
   * [Using the PyRDP Player](#using-the-pyrdp-player)
     + [Playing a replay file](#playing-a-replay-file)
     + [Listening for live connections](#listening-for-live-connections)
@@ -330,6 +331,15 @@ to be established. The following are currently not affected by this switch and w
 **NOTE**: If being able to eventually replay the full session is important, a good solution is to record the raw 
 RDP traffic using Wireshark and keep the TLS master secrets. Whenever PyRDP adds support for additional extensions, 
 it would then become possible to extract a valid RDP replay file from the raw network capture.
+
+##### `--gdi`: Accelerated Graphics Pipeline
+
+Tells the MITM to allow clients to use [Graphics Device Interface Acceleration][gdi] Extensions to stream
+drawing orders instead of raw bitmaps. The advantage of this mode is a significant reduction in required bandwidth
+for high resolution connections. PyRDP player support has been recently added and it is possible that some issues
+exist. As a result, this is currently an opt-in setting.
+
+[gdi]: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-rdpegdi/745f2eee-d110-464c-8aca-06fc1814f6ad
 
 ### Using the PyRDP Player
 Use `pyrdp-player.py` to run the player.

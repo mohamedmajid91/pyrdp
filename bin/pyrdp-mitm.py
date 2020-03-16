@@ -50,7 +50,7 @@ def main():
     parser.add_argument("--crawler-ignore-file", help="File to be used by the crawler to chose what folders to avoid when scraping the client shared drives.", default=None)
     parser.add_argument("--no-replay", help="Disable replay recording", action="store_true")
     parser.add_argument("--no-downgrade", help="Disables downgrading of unsupported extensions. This makes PyRDP harder to fingerprint but might impact the player's ability to replay captured traffic.", action="store_true")
-    parser.add_argument("--gdi", help="Enable drawing orders extensions (MS-RDPEGDI) support", action="store_true")
+    parser.add_argument("--gdi", help="Accept accelerated graphics pipeline (MS-RDPEGDI) extension", action="store_true")
 
     args = parser.parse_args()
     outDir = Path(args.output)
