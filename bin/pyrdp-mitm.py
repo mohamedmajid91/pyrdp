@@ -80,7 +80,7 @@ def main():
     config.recordReplays = not args.no_replay
     config.downgrade = not args.no_downgrade
     config.disableActiveClipboardStealing = args.disable_active_clipboard
-    config.enableGdi = args.gdi
+    config.useGdi = args.gdi
 
 
     payload = None
