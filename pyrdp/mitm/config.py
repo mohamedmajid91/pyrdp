@@ -81,3 +81,95 @@ class MITMConfig:
         Get the directory for intercepted files.
         """
         return self.outDir / "files"
+
+"""
+The default MITM configuration settings.
+"""
+DEFAULTS = """
+[vars]
+sensor_id = PyRDP
+log_dir = logs
+output_dir = pyrdp_output
+level      = INFO
+
+[logs]
+version = 1
+filter = pyrdp
+
+[logs:loggers:pyrdp]
+handlers = console, mitm
+level = ${vars:level}
+
+[logs:loggers:pyrdp.mitm.connections]
+handlers = connections
+level    = ${vars:level}
+
+[logs:loggers:crawler]
+handlers = crawl_json, crawl_txt
+level    = ${vars:level}
+
+[logs:loggers:ssl]
+handlers = ssl, ssl_console
+level    = DEBUG
+
+[logs:handlers:console]
+class     = logging.StreamHandler
+formatter = default
+stream    = ext://sys.stderr
+
+[logs:handlers:mitm]
+class     = logging.handlers.TimedRotatingFileHandler
+filename  = ${vars:output_dir}/${vars:log_dir}/mitm.log
+when      = D
+formatter = default
+
+[logs:handlers:connections]
+class     = logging.FileHandler
+filename  = ${vars:output_dir}/${vars:log_dir}/mitm.json
+formatter = json
+
+[logs:handlers:crawl_txt]
+class     = logging.FileHandler
+filename  = ${vars:output_dir}/${vars:log_dir}/crawl.log
+formatter = compact
+
+[logs:handlers:crawl_json]
+class     = logging.FileHandler
+filename  = ${vars:output_dir}/${vars:log_dir}/crawl.json
+formatter = json
+
+[logs:handlers:ssl]
+class     = logging.FileHandler
+filename  = ${vars:output_dir}/${vars:log_dir}/ssl.log
+formatter = ssl
+
+[logs:handlers:ssl_console]
+class     = logging.StreamHandler
+stream    = ext://sys.stderr
+formatter = ssl
+
+[logs:formatters:default]
+() = pyrdp.logging.formatters.VariableFormatter
+fmt = [{asctime}] - {levelname} - {sessionID} - {name} - {message}
+style = {
+
+[logs:formatters:default:defaultVariables]
+sessionID = GLOBAL
+
+[logs:formatters:json]
+() = pyrdp.logging.formatters.JSONFormatter
+
+[logs:formatters:json:baseDict]
+sensor = ${vars:sensor_id}
+
+[logs:formatters:compact]
+() = pyrdp.logging.formatters.VariableFormatter
+fmt = [{asctime}] - {sessionID} - {message}
+style = {
+
+[logs:formatters:compact:defaultVariables]
+sessionID = GLOBAL
+
+[logs:formatters:ssl]
+() = pyrdp.logging.formatters.SSLSecretFormatter
+"""
